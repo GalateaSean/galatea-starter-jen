@@ -29,7 +29,7 @@ public class StockPriceRpsyService {
     @Autowired
     private StockPriceRepository stockPriceRepository;
 
-    private final DateFormat DF = new SimpleDateFormat("yyyy-MM-dd");
+    private final DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
     /**
      * This is the method that is used to check inside our database
      * to see if we have all the data wanted by the user available
@@ -47,9 +47,9 @@ public class StockPriceRpsyService {
      * @param days
      * @return
      */
-    public String retrievePrices(String symbol, Integer days){
-       List<StockPrice> prices = stockPriceRepository.findAllMatches(symbol, days);
-       return "Symbol: " + symbol + prices.stream().map(sp -> sp.toString()).collect(Collectors.joining("\n"));
+    public List<StockPrice> retrievePrices(String symbol, Integer days){
+       return stockPriceRepository.findAllMatches(symbol, days);
+       //return prices.stream().map(sp -> sp.toString()).collect(Collectors.joining("\n"));
 
 
 
@@ -73,7 +73,7 @@ public class StockPriceRpsyService {
         Date currInDB = stockPriceRepository.retrieveMostRecentDate(symbol);
         String currDateDBString = null;
         if (currInDB != null){
-            currDateDBString = DF.format(currInDB);
+            currDateDBString = dateFormatter.format(currInDB);
         }
         log.info("this is the current date string that is in the DB for {}: {}, ", symbol, currDateDBString);
         //create a JsonNode as the root
@@ -104,7 +104,7 @@ public class StockPriceRpsyService {
                 break;
             }
             JsonNode dateNode = timeSeriesStart.get(dateString);
-            StockPrice spObj = new StockPrice(symbol, DF.parse(dateString),
+            StockPrice spObj = new StockPrice(symbol, dateFormatter.parse(dateString),
                     Double.parseDouble(dateNode.findValue("1. open").asText()),
                     Double.parseDouble(dateNode.findValue("2. high").asText()),
                     Double.parseDouble(dateNode.findValue("3. low").asText()),

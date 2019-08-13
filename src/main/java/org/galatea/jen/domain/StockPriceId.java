@@ -1,6 +1,8 @@
 package org.galatea.jen.domain;
 
 
+
+import lombok.Data;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -10,6 +12,7 @@ import java.util.Date;
  * composite key of the StockPrice table that is stored in mySQL
  * in a database called daily_stock_prices
  */
+@Data
 public class StockPriceId implements Serializable {
 
     private String symbol;
@@ -17,16 +20,4 @@ public class StockPriceId implements Serializable {
 
     public StockPriceId(){}
 
-    public StockPriceId(String symbol, Date date){
-        this.symbol = symbol;
-        this.date = date;
-    }
-
-    public String getSymbol(){
-        return this.symbol;
-    }
-
-    public Date getDate(){
-        return this.date;
-    }
 }

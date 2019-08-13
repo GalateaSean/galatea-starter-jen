@@ -1,7 +1,7 @@
 package org.galatea.jen.entrypoint;
 
 import java.io.*;
-
+import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.extern.slf4j.Slf4j;
 import java.lang.*;
 import java.text.ParseException;
+import org.galatea.jen.domain.StockPrice;
+import org.galatea.jen.service.StockPriceRpsyService;
+import org.galatea.jen.service.AVRequestService;
 
 
 /**
@@ -21,10 +24,10 @@ public class RequestController {
 
     //let Spring do its thing and initialize the two services
     @Autowired
-    org.galatea.jen.service.StockPriceRpsyService StockPriceRpsyService;
+    StockPriceRpsyService stockPriceRpsyService;
 
     @Autowired
-    org.galatea.jen.service.AVRequestService AVRequestService;
+    AVRequestService avRequestService;
 
     /**
      * This method passes the user input to StockPriceRpsyService to check for data
@@ -34,17 +37,17 @@ public class RequestController {
     @GetMapping(value = "/prices",
             produces =  MediaType.APPLICATION_JSON_VALUE)
     //we want to take in two parameters - the ticker and the number of days of data to display
-    public String getPrices(
+    public List<StockPrice> getPrices(
             @RequestParam(value = "symbol" , required=true) String symbol,
             @RequestParam(value = "days", required=true) Integer days)
             throws IOException, ParseException {
 
-        Integer found = StockPriceRpsyService.checkForWantedPrices(symbol);
+        Integer found = stockPriceRpsyService.checkForWantedPrices(symbol);
 
         if (found == 1){ //we have all the data we want in db (*excluding data from today)
                         //immediately fetch
-            return StockPriceRpsyService.retrievePrices(symbol,days);
+            return stockPriceRpsyService.retrievePrices(symbol,days);
         } //we don't have all data we want, query AV, save in db, fetch
-        return AVRequestService.getStockData(symbol,days);
+        return avRequestService.getStockData(symbol,days);
     }
 }
