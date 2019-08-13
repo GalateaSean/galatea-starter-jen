@@ -34,7 +34,7 @@ public class AVRequestService {
      * @return
      * @throws IOException
      */
-    public List<StockPrice> getStockData (String symbol, Integer days)
+    public List<String> getStockData (String symbol, Integer days)
                                         throws IOException, ParseException {
         //the alpha vantage querying url with ticker is a variable
         final String AlphaVantageUri = "https://www.alphavantage.co/query?" +

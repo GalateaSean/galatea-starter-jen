@@ -37,7 +37,7 @@ public class RequestController {
     @GetMapping(value = "/prices",
             produces =  MediaType.APPLICATION_JSON_VALUE)
     //we want to take in two parameters - the ticker and the number of days of data to display
-    public List<StockPrice> getPrices(
+    public List<String> getPrices(
             @RequestParam(value = "symbol" , required=true) String symbol,
             @RequestParam(value = "days", required=true) Integer days)
             throws IOException, ParseException {

@@ -47,12 +47,15 @@ public class StockPriceRpsyService {
      * @param days
      * @return
      */
-    public List<StockPrice> retrievePrices(String symbol, Integer days){
-       return stockPriceRepository.findAllMatches(symbol, days);
-       //return prices.stream().map(sp -> sp.toString()).collect(Collectors.joining("\n"));
+    public List<String> retrievePrices(String symbol, Integer days){
+        List<String> priceString = new ArrayList<>();
+        priceString.add(symbol);
+        List<StockPrice> prices = stockPriceRepository.findAllMatches(symbol, days);
+        prices.forEach((stockPriceObj) -> {
+                priceString.add(stockPriceObj.toString());
+        });
 
-
-
+        return priceString;
     }
 
     /**

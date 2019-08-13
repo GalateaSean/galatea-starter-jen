@@ -1,8 +1,11 @@
 package org.galatea.jen.domain;
 
 import javax.persistence.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * This is the model/schema for the StockPrice table stored in MySQL
@@ -11,7 +14,8 @@ import lombok.Data;
  * separate, serializable class to be created for the key
  */
 @Entity //This tells Hibernate to make a table out of this class
-@Data
+@Getter
+@Setter
 @Table(name="Stock_Price")
 @IdClass(StockPriceId.class) //we need this and have the key in
                             // another class because it is a composite key
@@ -48,5 +52,20 @@ public class StockPrice {
         this.low = low;
         this.close = close;
         this.volume = volume;
+    }
+
+    public String getDateString(){
+        Date d = this.getDate();
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        return df.format(d);
+    }
+
+    public String toString(){
+        return  " date: " + this.getDateString() +
+                " closing price: " + this.getClose() +
+                " highest price: " + this.getHigh() +
+                " lowest price: " + this.getLow() +
+                " opening price " + this.getOpen() +
+                " trading volume: " + this.getVolume();
     }
 }
