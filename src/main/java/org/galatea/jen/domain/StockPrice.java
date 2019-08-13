@@ -1,4 +1,4 @@
-package price.checker.domain;
+package org.galatea.jen.domain;
 
 import javax.persistence.*;
 import java.text.DateFormat;

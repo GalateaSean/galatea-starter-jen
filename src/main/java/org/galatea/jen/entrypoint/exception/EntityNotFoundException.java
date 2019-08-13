@@ -1,9 +1,4 @@
-package price.checker.entrypoint.exception;
-
-import org.springframework.http.HttpStatus;
-import price.checker.entrypoint.ApiError;
-
-import java.util.Collection;
+package org.galatea.jen.entrypoint.exception;
 
 /**
  * This is needed to catch a specific exception that could occur when the service, not the controller,

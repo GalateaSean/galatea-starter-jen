@@ -1,19 +1,15 @@
-package price.checker.entrypoint;
+package org.galatea.jen.entrypoint;
 
 import java.io.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import price.checker.domain.StockPrice;
-import price.checker.service.AVRequestService;
-import price.checker.service.StockPriceRpsyService;
 import lombok.extern.slf4j.Slf4j;
 import java.lang.*;
 import java.text.ParseException;
-import java.util.List;
 
 
 /**
@@ -25,10 +21,10 @@ public class RequestController {
 
     //let Spring do its thing and initialize the two services
     @Autowired
-    StockPriceRpsyService StockPriceRpsyService;
+    org.galatea.jen.service.StockPriceRpsyService StockPriceRpsyService;
 
     @Autowired
-    AVRequestService AVRequestService;
+    org.galatea.jen.service.AVRequestService AVRequestService;
 
     /**
      * This method passes the user input to StockPriceRpsyService to check for data

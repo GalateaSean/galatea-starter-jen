@@ -1,21 +1,14 @@
-package price.checker.service;
+package org.galatea.jen.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.client.RestTemplate;
-import price.checker.domain.StockPrice;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * This class is used to query to Alpha Vantage for stock data

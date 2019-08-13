@@ -1,4 +1,4 @@
-package price.checker.domain;
+package org.galatea.jen.domain;
 
 
 import java.io.Serializable;

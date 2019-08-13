@@ -1,22 +1,20 @@
-package price.checker.service;
+package org.galatea.jen.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.galatea.jen.entrypoint.exception.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import price.checker.domain.rpsy.StockPriceRepository;
-import price.checker.domain.StockPrice;
-import price.checker.entrypoint.exception.EntityNotFoundException;
+import org.galatea.jen.domain.rpsy.StockPriceRepository;
+import org.galatea.jen.domain.StockPrice;
 
-import javax.swing.text.html.parser.Entity;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**

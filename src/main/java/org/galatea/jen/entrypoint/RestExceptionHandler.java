@@ -1,4 +1,4 @@
-package price.checker.entrypoint;
+package org.galatea.jen.entrypoint;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

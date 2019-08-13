@@ -1,11 +1,10 @@
-package price.checker.domain.rpsy;
+package org.galatea.jen.domain.rpsy;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import price.checker.domain.StockPrice;
+import org.galatea.jen.domain.StockPrice;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package price.checker.entrypoint;
+package org.galatea.jen.entrypoint;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
