@@ -27,8 +27,8 @@ public class RestExceptionHandler {
     protected ResponseEntity<Object> handleMissingServletRequestException(
             final MissingServletRequestParameterException exception){
         log.debug("Missing Parameter sent ", exception);
-        String errorMessage = new StringBuilder().append("Required parameters 'symbol' and 'days' missing. Please try your request again " +
-                "with all the required parameters.").toString();
+        String errorMessage = "Required parameters 'symbol' and/or 'days' missing. Please try your request again "
+                + "with all the required parameters.";
 
         ApiError error = new ApiError(HttpStatus.BAD_REQUEST,errorMessage);
         return buildResponseEntity(error);
@@ -37,10 +37,9 @@ public class RestExceptionHandler {
     @ExceptionHandler(NumberFormatException.class)
     protected ResponseEntity<Object> handleNumberFormatException(
             final NumberFormatException exception){
-        String errorMessage = new StringBuilder().append("An integer is required for the parameter 'days' but input string ")
-                .append(exception.getMessage().substring(exception.getMessage().indexOf(":") + 2))
-                .append(" was found")
-                .toString();
+        String errorMessage = "An integer is required for the parameter 'days' but input string "
+                        + exception.getMessage().substring(exception.getMessage().indexOf(":") + 2)
+                + " was found";
         ApiError error = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR,errorMessage);
         return buildResponseEntity(error);
     }

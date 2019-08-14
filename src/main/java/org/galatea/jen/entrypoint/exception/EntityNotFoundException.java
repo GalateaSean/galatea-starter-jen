@@ -7,9 +7,7 @@ package org.galatea.jen.entrypoint.exception;
 public class EntityNotFoundException extends RuntimeException {
 
   public EntityNotFoundException(final String symbol) {
-      super(new StringBuilder().append("Stock price information for company with symbol: ")
-              .append(symbol)
-              .append(" was not found. Please double check and try again.")
-              .toString());
+      super("Stock price information for company with symbol: " +
+              symbol + " was not found. Please double check and try again.");
   }
 }
