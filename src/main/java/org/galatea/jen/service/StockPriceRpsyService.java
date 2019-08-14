@@ -9,13 +9,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.galatea.jen.domain.rpsy.StockPriceRepository;
 import org.galatea.jen.domain.StockPrice;
-
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * This is the service responsible for updating, deleting, retrieving
@@ -72,27 +70,11 @@ public class StockPriceRpsyService {
 
         //create a List to store all Stock Price objects for batch save
         List<StockPrice> prices = new ArrayList<>();
-        //we want this date as a check so that we don't re-save prices for every day, only save new prices
-        Date currInDB = stockPriceRepository.retrieveMostRecentDate(symbol);
-        String currDateDBString = null;
-        if (currInDB != null){
-            currDateDBString = dateFormatter.format(currInDB);
-        }
-        log.info("this is the current date string that is in the DB for {}: {}, ", symbol, currDateDBString);
-        //create a JsonNode as the root
-        JsonNode rootNode = new ObjectMapper().readTree(initialRes.getBody());
-
-
-        //this is the chunk of JSON with all the stock info
-        JsonNode timeSeriesStart = rootNode.get("Time Series (Daily)");
-
-        //throw custom error if timeSeriesStart node is null - indicates that there might be a typo when
-        //identifying symbol, or that the company simply does not exist
-        if (timeSeriesStart == null){
-            throw new EntityNotFoundException(symbol);
-        }
-
-
+        //get latest date we have prices on from db
+        String newestStoredDate = this.getLatestEntry(symbol);
+        //get the start of all time series
+        JsonNode timeSeriesStart = this.getTimeSeriesStart(initialRes, symbol);
+        //get all the dates to iterate over
         Iterator<String> dates = timeSeriesStart.fieldNames();
 
         //we want to skip today, because prices and trading volume is still changing
@@ -100,12 +82,10 @@ public class StockPriceRpsyService {
 
         //now we need to loop through and get all the stock prices and save into db
         while (dates.hasNext()) {
-
             String dateString = dates.next();
-            log.info("this is the date that should be saved: {}", dateString);
-            if (dateString.equals(currDateDBString)){
+            if (dateString.equals(newestStoredDate)){
                 break;
-            }
+        }
             JsonNode dateNode = timeSeriesStart.get(dateString);
             StockPrice spObj = new StockPrice(symbol, dateFormatter.parse(dateString),
                     Double.parseDouble(dateNode.findValue("1. open").asText()),
@@ -118,5 +98,44 @@ public class StockPriceRpsyService {
         }
         stockPriceRepository.saveAll(prices);
         log.info("Saved all new prices");
+    }
+
+
+    /**
+     * Helper method for parsing the JsonNode to get to the start of the time series data
+     * @param initialRes
+     * @param symbol
+     * @return
+     * @throws IOException
+     */
+    public JsonNode getTimeSeriesStart(ResponseEntity<String> initialRes, String symbol) throws IOException {
+        //create a JsonNode as the root
+        JsonNode rootNode = new ObjectMapper().readTree(initialRes.getBody());
+        //this is the chunk of JSON with all the stock info
+        JsonNode timeSeriesParent = rootNode.get("Time Series (Daily)");
+
+        //throw custom error if timeSeriesStart node is null - indicates that there might be a typo when
+        //identifying symbol, or that the company simply does not exist
+        if (timeSeriesParent == null){
+            throw new EntityNotFoundException(symbol);
+        }
+
+        return timeSeriesParent;
+    }
+
+    /**
+     * Helper method for retrieving the date of the latest prices we have stored in the database
+     * @param symbol
+     * @return
+     */
+    public String getLatestEntry(String symbol){
+        //we want this date as a check so that we don't re-save prices for every day, only save new prices
+        Date currInDB = stockPriceRepository.retrieveMostRecentDate(symbol);
+        String currDateDBString = null;
+        if (currInDB != null){
+            currDateDBString = dateFormatter.format(currInDB);
+        } //if it is null, then it means we don't have data on this symbol
+        log.info("this is the current date string that is in the DB for {}: {}, ", symbol, currDateDBString);
+        return currDateDBString;
     }
 }
