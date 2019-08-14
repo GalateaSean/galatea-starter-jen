@@ -1,12 +1,12 @@
 package org.galatea.jen.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.client.RestTemplate;
-import org.galatea.jen.domain.StockPrice;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.*;
@@ -19,7 +19,11 @@ import java.util.*;
 @Service
 public class AVRequestService {
 
-    private final String API_KEY = "KB7DSCK48G00WIRE";
+    @Value("${alphavantage.api_key}")
+    private String apiKey;
+
+    @Value("${alphavantage.url}")
+    private String url;
 
     @Autowired
     StockPriceRpsyService stockPriceRpsyService;
@@ -36,16 +40,12 @@ public class AVRequestService {
      */
     public List<String> getStockData (String symbol, Integer days)
                                         throws IOException, ParseException {
-        //the alpha vantage querying url with ticker is a variable
-        final String AlphaVantageUri = "https://www.alphavantage.co/query?" +
-                "function=TIME_SERIES_DAILY&" +
-                "symbol={stock}&" +
-                "outputsize=full&" +
-                "apikey="+API_KEY;
+
+        String alphaVantageUrl = String.format(this.url, symbol ,this.apiKey);
 
         RestTemplate restTemplate = new RestTemplate();
         //use the restTemplate to submit a GET request with user variables
-        ResponseEntity<String> initialRes = restTemplate.getForEntity(AlphaVantageUri, String.class, symbol);
+        ResponseEntity<String> initialRes = restTemplate.getForEntity(alphaVantageUrl, String.class);
 
         stockPriceRpsyService.saveAVPrices(symbol, initialRes);
         return stockPriceRpsyService.retrievePrices(symbol,days);
