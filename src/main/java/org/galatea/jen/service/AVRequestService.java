@@ -28,6 +28,9 @@ public class AVRequestService {
     @Autowired
     StockPriceRpsyService stockPriceRpsyService;
 
+    @Autowired
+    RestTemplate restTemplate;
+
 
     /**
      * This method is used when we have confirmed that the price data the the user
@@ -43,7 +46,6 @@ public class AVRequestService {
 
         String alphaVantageUrl = String.format(this.url, symbol ,this.apiKey);
 
-        RestTemplate restTemplate = new RestTemplate();
         //use the restTemplate to submit a GET request with user variables
         ResponseEntity<String> initialRes = restTemplate.getForEntity(alphaVantageUrl, String.class);
 
