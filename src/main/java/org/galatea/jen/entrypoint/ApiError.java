@@ -1,14 +1,9 @@
 package org.galatea.jen.entrypoint;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.http.HttpStatus;
 
-@Getter
-@ToString
-@AllArgsConstructor
+@Value
 public class ApiError {
 
     @NonNull
