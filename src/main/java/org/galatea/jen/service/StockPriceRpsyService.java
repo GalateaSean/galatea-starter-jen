@@ -36,7 +36,7 @@ public class StockPriceRpsyService {
      * @param symbol
      */
     public boolean wantedPricesExist(String symbol)throws ParseException, IOException {
-        return stockPriceRepository.findMostRecent(symbol) == 1 ? true : false;
+        return stockPriceRepository.existsById(symbol);
     }
 
     /**
