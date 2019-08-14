@@ -42,10 +42,10 @@ public class RequestController {
             @RequestParam(value = "days", required=true) Integer days)
             throws IOException, ParseException {
 
-        Integer found = stockPriceRpsyService.checkForWantedPrices(symbol);
 
-        if (found == 1){ //we have all the data we want in db (*excluding data from today)
-                        //immediately fetch
+        //if true, we have all the data we want in db (*excluding data from today)
+        //immediately fetch
+        if (stockPriceRpsyService.wantedPricesExist(symbol)){
             return stockPriceRpsyService.retrievePrices(symbol,days);
         } //we don't have all data we want, query AV, save in db, fetch
         return avRequestService.getStockData(symbol,days);
