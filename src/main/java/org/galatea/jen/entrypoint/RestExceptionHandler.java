@@ -38,7 +38,7 @@ public class RestExceptionHandler {
     protected ResponseEntity<Object> handleNumberFormatException(
             final NumberFormatException exception){
         String errorMessage = "An integer is required for the parameter 'days' but input string "
-                        + exception.getMessage().substring(exception.getMessage().indexOf(":") + 2)
+                        + exception.getMessage().substring(exception.getMessage().indexOf(':') + 2)
                 + " was found";
         ApiError error = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR,errorMessage);
         return buildResponseEntity(error);

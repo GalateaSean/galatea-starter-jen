@@ -8,9 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import lombok.extern.slf4j.Slf4j;
-import java.lang.*;
 import java.text.ParseException;
-import org.galatea.jen.domain.StockPrice;
 import org.galatea.jen.service.StockPriceRpsyService;
 import org.galatea.jen.service.AVRequestService;
 
