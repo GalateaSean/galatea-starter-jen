@@ -2,7 +2,9 @@ package org.galatea.jen.domain;
 
 
 
+import lombok.Builder;
 import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -13,11 +15,17 @@ import java.util.Date;
  * in a database called daily_stock_prices
  */
 @Data
+@Builder
 public class StockPriceId implements Serializable {
 
     private String symbol;
     private Date date;
 
     public StockPriceId(){}
+
+    public StockPriceId(String symbol, Date date){
+        this.symbol = symbol;
+        this.date = date;
+    }
 
 }

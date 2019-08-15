@@ -2,6 +2,7 @@ package org.galatea.jen.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.galatea.jen.domain.StockPriceId;
 import org.galatea.jen.entrypoint.exception.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -35,8 +37,12 @@ public class StockPriceRpsyService {
      * 0 = no
      * @param symbol
      */
-    public boolean wantedPricesExist(String symbol)throws ParseException, IOException {
-        return stockPriceRepository.existsById(symbol);
+    public boolean wantedPricesExist(String symbol) {
+        LocalDate yesterday = LocalDate.now().minusDays(1L);
+        Date yesterdayDate = java.sql.Date.valueOf(yesterday);
+
+        return stockPriceRepository.existsById(
+                StockPriceId.builder().symbol(symbol).date(yesterdayDate).build());
     }
 
     /**
@@ -49,9 +55,8 @@ public class StockPriceRpsyService {
         List<String> priceString = new ArrayList<>();
         priceString.add(symbol);
         List<StockPrice> prices = stockPriceRepository.findAllMatches(symbol, days);
-        prices.forEach((stockPriceObj) -> {
-                priceString.add(stockPriceObj.toString());
-        });
+        prices.forEach(stockPriceObj ->
+                priceString.add(stockPriceObj.toString()));
 
         return priceString;
     }
