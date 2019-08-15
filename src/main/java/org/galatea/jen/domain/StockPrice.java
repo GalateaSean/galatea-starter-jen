@@ -4,8 +4,8 @@ import javax.persistence.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import lombok.Getter;
-import lombok.Setter;
+
+import lombok.*;
 
 /**
  * This is the model/schema for the StockPrice table stored in MySQL
@@ -16,6 +16,9 @@ import lombok.Setter;
 @Entity //This tells Hibernate to make a table out of this class
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name="Stock_Price")
 @IdClass(StockPriceId.class) //we need this and have the key in
                             // another class because it is a composite key
@@ -39,20 +42,6 @@ public class StockPrice {
     private Double close;
 
     private Integer volume;
-
-    public StockPrice() {}
-
-    public StockPrice(String symbol, Date date,
-                      Double open, Double high,
-                      Double low, Double close, Integer volume){
-        this.symbol= symbol;
-        this.date = date;
-        this.open = open;
-        this.high = high;
-        this.low = low;
-        this.close = close;
-        this.volume = volume;
-    }
 
     public String getDateString(){
         Date d = this.getDate();

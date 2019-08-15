@@ -90,14 +90,15 @@ public class StockPriceRpsyService {
                 break;
         }
             JsonNode dateNode = timeSeriesStart.get(dateString);
-            StockPrice spObj = new StockPrice(symbol, dateFormatter.parse(dateString),
-                    Double.parseDouble(dateNode.findValue("1. open").asText()),
-                    Double.parseDouble(dateNode.findValue("2. high").asText()),
-                    Double.parseDouble(dateNode.findValue("3. low").asText()),
-                    Double.parseDouble(dateNode.findValue("4. close").asText()),
-                    Integer.parseInt(dateNode.findValue("5. volume").asText()));
-            prices.add(spObj);
-            log.info("We have successfully saved new object {} of {} into db",spObj.getSymbol(), spObj.getDate());
+            prices.add(StockPrice.builder()
+                    .symbol(symbol)
+                    .date(dateFormatter.parse(dateString))
+                    .open(Double.parseDouble(dateNode.findValue("1. open").asText()))
+                    .high(Double.parseDouble(dateNode.findValue("2. high").asText()))
+                    .low(Double.parseDouble(dateNode.findValue("3. low").asText()))
+                    .close(Double.parseDouble(dateNode.findValue("4. close").asText()))
+                    .volume(Integer.parseInt(dateNode.findValue("5. volume").asText())).build());
+            log.info("StockPrice object of date: {} has been created", dateFormatter.parse(dateString));
         }
         stockPriceRepository.saveAll(prices);
         log.info("Saved all new prices");
