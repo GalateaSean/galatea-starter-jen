@@ -33,8 +33,6 @@ public class StockPriceRpsyService {
     /**
      * This is the method that is used to check inside our database
      * to see if we have all the data wanted by the user available
-     * 1 = yes
-     * 0 = no
      * @param symbol
      */
     public boolean wantedPricesExist(String symbol) {

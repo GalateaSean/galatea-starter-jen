@@ -19,12 +19,5 @@ public class StockPriceId implements Serializable {
 
     private String symbol;
     private Date date;
-
-    public StockPriceId(){}
-
-    public StockPriceId(String symbol, Date date){
-        this.symbol = symbol;
-        this.date = date;
-    }
-
+    
 }
