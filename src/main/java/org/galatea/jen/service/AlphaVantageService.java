@@ -1,5 +1,6 @@
 package org.galatea.jen.service;
 
+import org.galatea.jen.domain.rpsy.StockPriceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -7,6 +8,8 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.client.RestTemplate;
+
+import javax.xml.ws.Response;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.*;
@@ -17,7 +20,7 @@ import java.util.*;
 @RequiredArgsConstructor
 @Slf4j
 @Service
-public class AVRequestService {
+public class AlphaVantageService {
 
     @Value("${alphavantage.api_key}")
     private String apiKey;
@@ -27,6 +30,13 @@ public class AVRequestService {
 
     @Autowired
     StockPriceRpsyService stockPriceRpsyService;
+
+    @Autowired
+    AlphaVantageClient alphaVantageClient;
+
+    @Autowired
+    private StockPriceRepository stockPriceRepository;
+
 
     @Autowired
     RestTemplate restTemplate;
@@ -44,12 +54,18 @@ public class AVRequestService {
     public List<String> getStockData (String symbol, Integer days)
                                         throws IOException, ParseException {
 
-        String alphaVantageUrl = String.format(this.url, symbol ,this.apiKey);
+        if (stockPriceRepository.contains(symbol)){ //not the first time we've queries for this symbol
+                                                          // we want query output to be compact
+            log.info("this query returned that we have symbol: {} in our database", symbol);
+            stockPriceRpsyService.saveAVPrices(symbol,
+                    alphaVantageClient.getCompactStockPrices(symbol,this.apiKey));
 
-        //use the restTemplate to submit a GET request with user variables
-        ResponseEntity<String> initialRes = restTemplate.getForEntity(alphaVantageUrl, String.class);
+        } else { //first time querying for this symbol, we want the 20-years worth of data points to store
+            log.info("this query returned that we do NOT have symbol: {} in our database", symbol);
+            stockPriceRpsyService.saveAVPrices(symbol,
+                    alphaVantageClient.getAllStockPrices(symbol, this.apiKey));
+        }
 
-        stockPriceRpsyService.saveAVPrices(symbol, initialRes);
         return stockPriceRpsyService.retrievePrices(symbol,days);
     }
 }

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.extern.slf4j.Slf4j;
 import java.text.ParseException;
 import org.galatea.jen.service.StockPriceRpsyService;
-import org.galatea.jen.service.AVRequestService;
+import org.galatea.jen.service.AlphaVantageService;
 
 
 /**
@@ -25,7 +25,7 @@ public class RequestController {
     StockPriceRpsyService stockPriceRpsyService;
 
     @Autowired
-    AVRequestService avRequestService;
+    AlphaVantageService alphaVantageService;
 
     /**
      * This method passes the user input to StockPriceRpsyService to check for data
@@ -43,9 +43,11 @@ public class RequestController {
 
         //if true, we have all the data we want in db (*excluding data from today)
         //immediately fetch
-        if (stockPriceRpsyService.wantedPricesExist(symbol)){
-            return stockPriceRpsyService.retrievePrices(symbol,days);
-        } //we don't have all data we want, query AV, save in db, fetch
-        return avRequestService.getStockData(symbol,days);
+        if (stockPriceRpsyService.wantedPricesExist(symbol)) {
+            return stockPriceRpsyService.retrievePrices(symbol, days);
+        }
+
+        //we don't have all data we want, query AV, save in db, fetch
+        return alphaVantageService.getStockData(symbol, days);
     }
 }

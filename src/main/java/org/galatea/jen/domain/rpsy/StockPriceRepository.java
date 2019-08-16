@@ -19,6 +19,12 @@ public interface StockPriceRepository extends JpaRepository<StockPrice,StockPric
     @Override
     boolean existsById(StockPriceId id);
 
+
+    @Query(value = "SELECT CASE WHEN COUNT(*) >= 1 THEN 'true' ELSE 'false' END AS BOOL " +
+            "FROM stock_price " +
+            "WHERE symbol = ? ", nativeQuery = true)
+    boolean contains(String symbol);
+
     //find and display all the stock prices specified by the user.
     //simply order the query by date and limit the # of entries
     //displayed

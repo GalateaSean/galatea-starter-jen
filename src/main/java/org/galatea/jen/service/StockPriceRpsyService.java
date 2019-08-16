@@ -16,7 +16,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
-import static org.galatea.jen.domain.alphaVantageMapper.*;
+import static org.galatea.jen.domain.AlphaVantageMapper.*;
 
 /**
  * This is the service responsible for updating, deleting, retrieving
@@ -123,8 +123,7 @@ public class StockPriceRpsyService {
             throw new EntityNotFoundException(symbol);
         }
         //this is the chunk of JSON with all the stock info
-        JsonNode timeSeriesParent = rootNode.get(TIME_SERIES);
-        return timeSeriesParent;
+        return rootNode.get(TIME_SERIES);
     }
 
     /**

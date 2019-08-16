@@ -6,7 +6,7 @@ import lombok.experimental.UtilityClass;
 /**
  * This class serves as a mapper to alpha vantage JSON responses
  */
-public class alphaVantageMapper {
+public class AlphaVantageMapper {
 
     public static final String TIME_SERIES = "Time Series (Daily)";
     public static final String OPENING_PRICE = "1. open";
