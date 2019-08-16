@@ -3,13 +3,9 @@ package org.galatea.jen.service;
 import org.galatea.jen.domain.rpsy.StockPriceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.client.RestTemplate;
-
-import javax.xml.ws.Response;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.*;
@@ -25,9 +21,6 @@ public class AlphaVantageService {
     @Value("${alphavantage.api_key}")
     private String apiKey;
 
-    @Value("${alphavantage.url}")
-    private String url;
-
     @Autowired
     StockPriceRpsyService stockPriceRpsyService;
 
@@ -36,10 +29,6 @@ public class AlphaVantageService {
 
     @Autowired
     private StockPriceRepository stockPriceRepository;
-
-
-    @Autowired
-    RestTemplate restTemplate;
 
 
     /**
