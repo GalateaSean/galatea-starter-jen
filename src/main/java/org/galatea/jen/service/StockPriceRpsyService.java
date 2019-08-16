@@ -16,6 +16,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
+import static org.galatea.jen.domain.alphaVantageMapper.*;
 
 /**
  * This is the service responsible for updating, deleting, retrieving
@@ -93,11 +94,11 @@ public class StockPriceRpsyService {
             prices.add(StockPrice.builder()
                     .symbol(symbol)
                     .date(dateFormatter.parse(dateString))
-                    .open(Double.parseDouble(dateNode.findValue("1. open").asText()))
-                    .high(Double.parseDouble(dateNode.findValue("2. high").asText()))
-                    .low(Double.parseDouble(dateNode.findValue("3. low").asText()))
-                    .close(Double.parseDouble(dateNode.findValue("4. close").asText()))
-                    .volume(Integer.parseInt(dateNode.findValue("5. volume").asText())).build());
+                    .open(dateNode.findValue(OPENING_PRICE).asDouble())
+                    .high(dateNode.findValue(HIGHEST_PRICE).asDouble())
+                    .low(dateNode.findValue(LOWEST_PRICE).asDouble())
+                    .close(dateNode.findValue(CLOSING_PRICE).asDouble())
+                    .volume(dateNode.findValue(VOLUME).asInt()).build());
             log.info("StockPrice object of date: {} has been created", dateFormatter.parse(dateString));
         }
         stockPriceRepository.saveAll(prices);
@@ -115,15 +116,14 @@ public class StockPriceRpsyService {
     public JsonNode getTimeSeriesStart(ResponseEntity<String> initialRes, String symbol) throws IOException {
         //create a JsonNode as the root
         JsonNode rootNode = new ObjectMapper().readTree(initialRes.getBody());
-        //this is the chunk of JSON with all the stock info
-        JsonNode timeSeriesParent = rootNode.get("Time Series (Daily)");
 
-        //throw custom error if timeSeriesStart node is null - indicates that there might be a typo when
+        //throw custom error if rootNode contains an error message - indicates that there might be a typo when
         //identifying symbol, or that the company simply does not exist
-        if (timeSeriesParent == null){
+        if (rootNode.has(ERROR_MESSAGE)){
             throw new EntityNotFoundException(symbol);
         }
-
+        //this is the chunk of JSON with all the stock info
+        JsonNode timeSeriesParent = rootNode.get(TIME_SERIES);
         return timeSeriesParent;
     }
 
