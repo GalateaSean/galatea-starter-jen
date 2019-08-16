@@ -1,1 +1,1 @@
-# galatea-starter-jen
+# galatea-starter-org
