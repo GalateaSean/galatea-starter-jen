@@ -40,7 +40,7 @@ public class AlphaVantageService {
      * @return
      * @throws IOException
      */
-    public List<String> getStockData (String symbol, Integer days)
+    public void getStockData (String symbol, Integer days)
                                         throws IOException, ParseException {
 
         if (stockPriceRepository.contains(symbol)){ //not the first time we've queries for this symbol
@@ -54,7 +54,5 @@ public class AlphaVantageService {
             stockPriceRpsyService.saveAVPrices(symbol,
                     alphaVantageClient.getAllStockPrices(symbol, this.apiKey));
         }
-
-        return stockPriceRpsyService.retrievePrices(symbol,days);
     }
 }

@@ -41,13 +41,12 @@ public class RequestController {
             throws IOException, ParseException {
 
 
-        //if true, we have all the data we want in db (*excluding data from today)
-        //immediately fetch
-        if (stockPriceRpsyService.wantedPricesExist(symbol)) {
-            return stockPriceRpsyService.retrievePrices(symbol, days);
+        //if we don't have all data we want, query AV, save in db
+        if (!stockPriceRpsyService.wantedPricesExist(symbol)) {
+            alphaVantageService.getStockData(symbol, days);
         }
 
-        //we don't have all data we want, query AV, save in db, fetch
-        return alphaVantageService.getStockData(symbol, days);
+        //we have all the data we want in db (*excluding data from today), fetch
+        return stockPriceRpsyService.retrievePrices(symbol, days);
     }
 }
