@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.*;
 
 /**
  * This class is used to query to Alpha Vantage for stock data
@@ -18,9 +17,9 @@ import java.util.*;
 @Service
 public class AlphaVantageService {
 
+
     @Value("${alphavantage.api_key}")
     private String apiKey;
-
     @Autowired
     StockPriceRpsyService stockPriceRpsyService;
 
